@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table>
+
+    <select name="" id="one">
+        <option value="">请选择一级分类</option>
+    </select>
+
+    <select name="" id="two">
+        <option value="">请选择二级分类</option>
+    </select>
+
+    <select name="" id="three">
+        <option value="">请选择三级分类</option>
+    </select>
+
+</table>
+
+</body>
+<script src="/jquery-3.2.1.min.js"></script>
+<script>
+
+    $(function(){
+        //一级
+        var province = document.getElementById('one');
+        $.ajax({
+            url:"one",
+            type:'post',
+            contentType:false,
+            processData:false,
+            success:function(data){
+                province.length=data.length+1;
+                console.log(data);
+                for(var i=1;i<data.length+1;i++){
+                    province.options[i].text=data[i-1]['region_name'];
+                    province.options[i].value=data[i-1]['id'];
+                }
+            }
+        });
+
+        //二级
+        var two = document.getElementById('two');
+        $('#one').change(function(){
+            $('#two option:gt(1)').remove();
+            var data = new FormData($('#one'));
+            data.append('id',$('#one option:selected').val());
+            $.ajax({
+                url:"two",
+                type:'post',
+                data:data,
+                contentType:false,
+                processData:false,
+                success:function(data){
+                    two.length = data.length+1;
+                    console.log(data);
+                    for (var i = 1; i < data.length+1; i++) {
+                        two.options[i].text=data[i-1]['region_name'];
+                        two.options[i].value=data[i-1]['id'];
+                        // alert(1);
+                    }
+                }
+            });
+        });
+
+        //三级
+        var three = document.getElementById('three');
+        $('#two').change(function(){
+            $('#three option:gt(1)').remove();
+            var data = new 
